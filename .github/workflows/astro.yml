@@ -30,6 +30,8 @@ env:
 
 jobs:
   build:
+    env:
+      PUBLIC_HUGGING_FACE_TOKEN: ${{ secrets.PUBLIC_HUGGING_FACE_TOKEN }}
     name: Build
     runs-on: ubuntu-latest
     steps:
