@@ -7,7 +7,7 @@
     "build": "npm run lint && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint"
+    "lint": "eslint src"
   },
   "dependencies": {
     "@astrojs/react": "^4.1.2",
