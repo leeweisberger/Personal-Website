@@ -25,5 +25,9 @@ export default defineConfig({
                   }
                 : undefined,
         },
+        define: {
+            // eslint-disable-next-line no-undef
+            'process.env': process.env,
+        },
     },
 });
