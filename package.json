@@ -12,7 +12,6 @@
   "dependencies": {
     "@ai-sdk/groq": "^1.0.9",
     "@astrojs/cloudflare": "^12.1.0",
-    "@astrojs/node": "^9.0.0",
     "@astrojs/react": "^4.1.2",
     "@astrojs/tailwind": "^5.1.4",
     "@material-tailwind/react": "^2.1.10",
