@@ -1,8 +1,7 @@
 interface ImportMetaEnv {
-    readonly PUBLIC_HUGGING_FACE_TOKEN: string;
-    // more env variables...
-  }
-  
-  interface ImportMeta {
+    readonly GROQ_API_KEY: string;
+}
+
+interface ImportMeta {
     readonly env: ImportMetaEnv;
-  }
+}
