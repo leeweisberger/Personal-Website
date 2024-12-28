@@ -43,7 +43,7 @@ export function LlmResponse(props: Props) {
                         {props.time.toLocaleTimeString()}
                     </span>
                 </div>
-                <div className="prose lg:prose-xl py-2.5 text-sm font-normal text-gray-900 dark:text-white">
+                <div className="prose lg:prose-xl dark:prose-invert py-2.5 text-sm font-normal text-gray-900 dark:text-white">
                     <MemoizedMarkdown id={props.id} content={props.text} />
                 </div>
             </div>

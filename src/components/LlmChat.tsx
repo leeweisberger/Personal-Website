@@ -40,7 +40,7 @@ export function LlmChat() {
                     <LlmResponse
                         key={message.id}
                         id={message.id}
-                        role={message.role === 'user' ? 'user' : 'llm'}
+                        role={message.role}
                         text={message.content}
                         time={message.createdAt ?? new Date()}
                     />

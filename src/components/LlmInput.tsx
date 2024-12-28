@@ -16,7 +16,7 @@ export function LlmInput(props: Props) {
         <div>
             <label
                 htmlFor="input"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                className="mb-2 block text-sm font-medium text-gray-900"
             >
                 Ask me anything
             </label>
