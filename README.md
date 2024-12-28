@@ -1,6 +1,6 @@
 # Personal website
 
-This is Lee Weisberger's personal website hosted at leeweisberger.com
+This is Lee Weisberger's personal website hosted at [leeweisberger.com](https://leeweisberger.com).
 
 ## 🧞 Development
 
