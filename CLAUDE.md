@@ -18,7 +18,7 @@ This is Lee Weisberger's personal website built with Astro, React, and Tailwind 
 
 Note: Both `dev` and `build` commands automatically run the linter before execution.
 
-Ensure that you run `npm run lint` after making changes to ensure that the linter passes. Also ensure that the website
+Ensure that you run `npm run lint` and `npx tsc --noEmit` after making changes to ensure that the linter + typescript. Also ensure that the website
 does not return errors by checking the dev server at `localhost:4321` if it's already running, or spinning it up with `npm run dev`, checking, and tearing it down if it isn't already running.
 
 ## Architecture

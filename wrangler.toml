@@ -1,0 +1,12 @@
+# Cloudflare Pages configuration
+name = "personal-website"
+compatibility_date = "2024-01-01"
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "PROMPT_STORE"
+id = "YOUR_KV_NAMESPACE_ID"  # Replace with actual KV namespace ID from Cloudflare dashboard
+
+[[kv_namespaces]]
+binding = "SESSION"
+id = "YOUR_SESSION_KV_ID"  # Replace with actual SESSION KV namespace ID

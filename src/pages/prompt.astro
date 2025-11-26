@@ -1,0 +1,259 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { systemPrompt as defaultPrompt } from '../prompts';
+
+const PROMPT_PASSWORD = import.meta.env.PROMPT_PASSWORD || 'password123';
+
+// Handle password check and authentication
+let isAuthenticated = false;
+let error = '';
+let success = '';
+let isEditing = false;
+
+// Check if already authenticated via cookie
+const authCookie = Astro.cookies.get('prompt_auth');
+if (authCookie?.value === 'true') {
+    isAuthenticated = true;
+}
+
+if (Astro.request.method === 'POST') {
+    const data = await Astro.request.formData();
+    const action = data.get('action');
+
+    if (action === 'login') {
+        const password = data.get('password');
+        if (password === PROMPT_PASSWORD) {
+            Astro.cookies.set('prompt_auth', 'true', {
+                path: '/',
+                maxAge: 60 * 60 * 24, // 24 hours
+                httpOnly: true,
+                secure: import.meta.env.PROD,
+                sameSite: 'strict',
+            });
+            isAuthenticated = true;
+        } else {
+            error = 'Incorrect password';
+        }
+    } else if (action === 'save' && isAuthenticated) {
+        // Save the edited prompt to KV storage
+        const newPrompt = data.get('prompt') as string;
+        try {
+            // Store in Cloudflare KV if available
+            if (Astro.locals.runtime?.env?.PROMPT_STORE) {
+                await Astro.locals.runtime.env.PROMPT_STORE.put(
+                    'system_prompt',
+                    newPrompt,
+                );
+                success = 'Prompt saved successfully!';
+            } else {
+                error =
+                    'KV storage not available. Please add PROMPT_STORE KV binding to wrangler.toml';
+            }
+        } catch (e) {
+            error = 'Failed to save prompt: ' + (e as Error).message;
+        }
+    }
+}
+
+// Handle logout
+if (Astro.url.searchParams.get('logout') === 'true') {
+    Astro.cookies.delete('prompt_auth', { path: '/' });
+    isAuthenticated = false;
+}
+
+// Check for edit mode
+if (Astro.url.searchParams.get('edit') === 'true' && isAuthenticated) {
+    isEditing = true;
+}
+
+// Get current prompt (from KV or default)
+let currentPrompt = defaultPrompt;
+if (isAuthenticated) {
+    try {
+        if (Astro.locals.runtime?.env?.PROMPT_STORE) {
+            const stored = await Astro.locals.runtime.env.PROMPT_STORE.get(
+                'system_prompt',
+            );
+            if (stored) {
+                currentPrompt = stored.trim();
+            }
+        }
+    } catch (e) {
+        console.error('Failed to load prompt from KV:', e);
+    }
+}
+---
+
+<Layout>
+    <div
+        class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 px-4 py-12 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
+    >
+        <div class="mx-auto max-w-4xl">
+            {
+                isAuthenticated ? (
+                    <div class="animate-in rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800">
+                        <div class="mb-6 flex items-center justify-between">
+                            <h1 class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-4xl font-bold text-transparent dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
+                                System Prompt
+                            </h1>
+                            <div class="flex gap-2">
+                                {!isEditing && (
+                                    <a
+                                        href="/prompt?edit=true"
+                                        class="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+                                    >
+                                        Edit
+                                    </a>
+                                )}
+                                <a
+                                    href="/prompt?logout=true"
+                                    class="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600"
+                                >
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+
+                        {success && (
+                            <div class="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                                {success}
+                            </div>
+                        )}
+
+                        {error && (
+                            <div class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                                {error}
+                            </div>
+                        )}
+
+                        <p class="mb-6 text-gray-600 dark:text-gray-300">
+                            This is the system prompt used to power the AI
+                            chatbot on leeweisberger.com
+                        </p>
+
+                        {isEditing ? (
+                            <form method="POST" class="space-y-4">
+                                <input
+                                    type="hidden"
+                                    name="action"
+                                    value="save"
+                                />
+                                <div>
+                                    <label
+                                        for="prompt"
+                                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                    >
+                                        Edit Prompt
+                                    </label>
+                                    <textarea
+                                        id="prompt"
+                                        name="prompt"
+                                        rows={20}
+                                        class="block w-full resize-y rounded-xl border-2 border-gray-200 bg-white px-4 py-3 font-mono text-sm text-gray-900 transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
+                                    >
+                                        {currentPrompt}
+                                    </textarea>
+                                </div>
+                                <div class="flex gap-4">
+                                    <button
+                                        type="submit"
+                                        class="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:from-blue-700 hover:to-purple-700 hover:shadow-md active:scale-[0.98]"
+                                    >
+                                        Save Changes
+                                    </button>
+                                    <a
+                                        href="/prompt"
+                                        class="rounded-xl border-2 border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:bg-gray-700"
+                                    >
+                                        Cancel
+                                    </a>
+                                </div>
+                            </form>
+                        ) : (
+                            <>
+                                <div class="rounded-xl bg-gray-50 p-6 dark:bg-gray-900">
+                                    <pre class="overflow-x-auto whitespace-pre-wrap break-words text-sm leading-relaxed text-gray-800 dark:text-gray-200">{currentPrompt}</pre>
+                                </div>
+                                <div class="mt-6 flex gap-4">
+                                    <a
+                                        href="/"
+                                        class="rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:from-blue-700 hover:to-purple-700 hover:shadow-md"
+                                    >
+                                        Back to Home
+                                    </a>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ) : (
+                    <div class="animate-in rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800">
+                        <h1 class="mb-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-4xl font-bold text-transparent dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
+                            Protected Page
+                        </h1>
+                        <p class="mb-6 text-gray-600 dark:text-gray-300">
+                            Enter the password to view the system prompt
+                        </p>
+
+                        <form method="POST" class="space-y-4">
+                            <input type="hidden" name="action" value="login" />
+                            <div>
+                                <label
+                                    for="password"
+                                    class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                >
+                                    Password
+                                </label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    required
+                                    class="block w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
+                                    placeholder="Enter password"
+                                />
+                            </div>
+
+                            {error && (
+                                <div class="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                                    {error}
+                                </div>
+                            )}
+
+                            <div class="flex gap-4">
+                                <button
+                                    type="submit"
+                                    class="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:from-blue-700 hover:to-purple-700 hover:shadow-md active:scale-[0.98]"
+                                >
+                                    Submit
+                                </button>
+                                <a
+                                    href="/"
+                                    class="rounded-xl border-2 border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:bg-gray-700"
+                                >
+                                    Back to Home
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                )
+            }
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .animate-in {
+        animation: fade-in 0.3s ease-out;
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
