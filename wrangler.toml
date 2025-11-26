@@ -1,12 +1,13 @@
 # Cloudflare Pages configuration
 name = "personal-website"
 compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
 
 # KV Namespaces
 [[kv_namespaces]]
 binding = "PROMPT_STORE"
-id = "YOUR_KV_NAMESPACE_ID"  # Replace with actual KV namespace ID from Cloudflare dashboard
+id = "3fdb1a7c7c0941d49278ef3e976946ed"
 
 [[kv_namespaces]]
 binding = "SESSION"
-id = "YOUR_SESSION_KV_ID"  # Replace with actual SESSION KV namespace ID
+id = "9bfa31ece43545ae9f876f0419e21f2e"
