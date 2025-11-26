@@ -20,7 +20,6 @@ const MemoizedMarkdownBlock = memo(
 MemoizedMarkdownBlock.displayName = 'MemoizedMarkdownBlock';
 
 export const MemoizedMarkdown = memo(
-    // eslint-disable-next-line react/prop-types
     ({ content, id }: { content: string; id: string }) => {
         const blocks = useMemo(
             () => parseMarkdownIntoBlocks(content),

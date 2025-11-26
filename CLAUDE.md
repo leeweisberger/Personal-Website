@@ -18,6 +18,9 @@ This is Lee Weisberger's personal website built with Astro, React, and Tailwind 
 
 Note: Both `dev` and `build` commands automatically run the linter before execution.
 
+Ensure that you run `npm run lint` after making changes to ensure that the linter passes. Also ensure that the website
+does not return errors by checking the dev server at `localhost:4321` if it's already running, or spinning it up with `npm run dev`, checking, and tearing it down if it isn't already running.
+
 ## Architecture
 
 ### Tech Stack
@@ -54,7 +57,6 @@ This resolves MessageChannel polyfill issues when deploying to Cloudflare. See: 
 
 ```
 src/
-├── actions/         # Astro server actions (API handlers)
 ├── components/      # React and Astro components
 ├── layouts/         # Astro layout templates
 ├── pages/           # Astro pages and API routes
@@ -66,19 +68,12 @@ src/
 
 ### AI Chatbot Architecture
 
-The chatbot uses two different API patterns:
+The chatbot uses an **API Route** (`src/pages/api/chat.ts`):
 
-1. **API Route Pattern** (`src/pages/api/chat.ts`):
-
-    - Standard POST endpoint at `/api/chat`
-    - Uses Vercel AI SDK's `streamText()` with message history
-    - System prompt from `prompts.ts` defines Lee's persona
-    - Used by React components via `useChat()` hook
-
-2. **Astro Actions Pattern** (`src/actions/index.ts`):
-    - Server-side action using `defineAction()`
-    - Alternative approach for Astro-native API calls
-    - Currently defined but may not be actively used
+- Standard POST endpoint at `/api/chat`
+- Uses Vercel AI SDK's `streamText()` with message history
+- System prompt from `prompts.ts` defines Lee's persona
+- Used by React components via `useChat()` hook
 
 **Main Chat Component**: `LlmChat.tsx` orchestrates the chat UI:
 

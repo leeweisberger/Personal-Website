@@ -11,10 +11,9 @@ export default [
     { languageOptions: { globals: globals.browser } },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    pluginReact.configs.flat.recommended,
-    ...eslintPluginAstro.configs.recommended,
-    eslintConfigPrettier,
     {
+        files: ['**/*.{jsx,tsx}'],
+        ...pluginReact.configs.flat.recommended,
         rules: {
             'react/react-in-jsx-scope': 'off',
         },
@@ -24,4 +23,6 @@ export default [
             },
         },
     },
+    ...eslintPluginAstro.configs.recommended,
+    eslintConfigPrettier,
 ]

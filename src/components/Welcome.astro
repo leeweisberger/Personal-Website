@@ -1,13 +1,17 @@
 ---
 import background from "../assets/background.svg";
 import { LlmChat } from "./LlmChat";
+import Header from "./Header.astro";
 ---
 
 <div id="container">
   <img id="background" src={background.src} alt="" fetchPriority="high" />
   <main>
     <section id="hero">
-      <LlmChat  client:load />
+      <Header />
+      <div class="chat-container">
+        <LlmChat client:load />
+      </div>
     </section>
   </main>
 </div>
@@ -37,12 +41,31 @@ import { LlmChat } from "./LlmChat";
 
   #hero {
     display: flex;
-    align-items: start;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
     padding: 16px;
-	max-width: 600px;
+	max-width: 700px;
 	width: 100%;
+  }
+
+  .chat-container {
+    width: 100%;
+    height: 600px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .chat-container {
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
   }
 
   @media screen and (max-width: 768px) {
@@ -54,6 +77,10 @@ import { LlmChat } from "./LlmChat";
     #hero {
       display: block;
       padding-top: 10%;
+    }
+
+    .chat-container {
+      height: 500px;
     }
   }
 </style>

@@ -11,7 +11,7 @@ export const POST: APIRoute = async ({ request }) => {
     const { messages }: { messages: CoreMessage[] } = await request.json();
 
     const result = streamText({
-        model: groq('llama-3.3-70b-versatile'),
+        model: groq('meta-llama/llama-4-maverick-17b-128e-instruct'),
         messages,
         system: systemPrompt,
     });
