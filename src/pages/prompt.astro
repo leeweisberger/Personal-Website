@@ -1,8 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { systemPrompt as defaultPrompt } from '../prompts';
+import jwt from 'jsonwebtoken';
 
 const PROMPT_PASSWORD = import.meta.env.PROMPT_PASSWORD || 'password123';
+const JWT_SECRET = import.meta.env.JWT_SECRET || 'fallback-secret-key';
 
 // Handle password check and authentication
 let isAuthenticated = false;
@@ -10,10 +12,18 @@ let error = '';
 let success = '';
 let isEditing = false;
 
-// Check if already authenticated via cookie
+// Check if already authenticated via JWT cookie
 const authCookie = Astro.cookies.get('prompt_auth');
-if (authCookie?.value === 'true') {
-    isAuthenticated = true;
+if (authCookie?.value) {
+    try {
+        // Verify the JWT token
+        jwt.verify(authCookie.value, JWT_SECRET);
+        isAuthenticated = true;
+    } catch (err) {
+        console.error('Failed to verify JWT:', err);
+        // Invalid or expired token
+        isAuthenticated = false;
+    }
 }
 
 if (Astro.request.method === 'POST') {
@@ -23,7 +33,17 @@ if (Astro.request.method === 'POST') {
     if (action === 'login') {
         const password = data.get('password');
         if (password === PROMPT_PASSWORD) {
-            Astro.cookies.set('prompt_auth', 'true', {
+            // Create JWT token with 24 hour expiration
+            const token = jwt.sign(
+                {
+                    authenticated: true,
+                    iat: Math.floor(Date.now() / 1000),
+                },
+                JWT_SECRET,
+                { expiresIn: '24h' },
+            );
+
+            Astro.cookies.set('prompt_auth', token, {
                 path: '/',
                 maxAge: 60 * 60 * 24, // 24 hours
                 httpOnly: true,
