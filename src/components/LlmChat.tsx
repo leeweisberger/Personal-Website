@@ -16,7 +16,13 @@ export function LlmChat() {
     const { messages, input, setInput, append, isLoading, setMessages } =
         useChat();
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+        // Collapsed by default on mobile, expanded on desktop
+        if (typeof window !== 'undefined') {
+            return window.innerWidth < 768;
+        }
+        return true;
+    });
     const [selectedModel, setSelectedModel] = useState(models[0]);
     const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -58,23 +64,66 @@ export function LlmChat() {
     }
 
     return (
-        <div className="bg-gpt-main flex h-full w-full">
-            {/* Sidebar */}
-            <Sidebar
-                onNewChat={handleNewChat}
-                isCollapsed={sidebarCollapsed}
-                onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        <div className="bg-gpt-main relative flex h-full w-full">
+            {/* Mobile backdrop */}
+            <div
+                className={`fixed inset-0 z-40 bg-black/20 transition-opacity duration-300 md:pointer-events-none md:opacity-0 ${
+                    sidebarCollapsed
+                        ? 'pointer-events-none opacity-0'
+                        : 'opacity-100'
+                }`}
+                onClick={() => setSidebarCollapsed(true)}
             />
+
+            {/* Sidebar - fixed overlay on mobile, inline on desktop */}
+            <div
+                className={`bg-gpt-sidebar fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out md:relative md:z-auto md:w-auto md:translate-x-0 md:overflow-hidden md:transition-[width] ${
+                    sidebarCollapsed
+                        ? '-translate-x-full md:!w-0'
+                        : 'translate-x-0 md:!w-64'
+                }`}
+            >
+                <div className="h-full w-64">
+                    <Sidebar
+                        onNewChat={() => {
+                            handleNewChat();
+                            setSidebarCollapsed(true);
+                        }}
+                        isCollapsed={false}
+                        onToggleCollapse={() => setSidebarCollapsed(true)}
+                    />
+                </div>
+            </div>
 
             {/* Main content area */}
             <div className="flex flex-1 flex-col">
                 {/* Header */}
                 <header className="border-gpt-border flex h-14 items-center justify-between border-b px-4">
                     <div className="flex items-center gap-2">
+                        {/* Mobile hamburger menu - two lines */}
+                        <button
+                            onClick={() => setSidebarCollapsed(false)}
+                            className="text-gpt-text-secondary hover:bg-gpt-hover flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg md:hidden"
+                            aria-label="Open menu"
+                        >
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
+                                <path d="M6 9h12" />
+                                <path d="M6 15h12" />
+                            </svg>
+                        </button>
+
+                        {/* Desktop sidebar toggle */}
                         {sidebarCollapsed && (
                             <button
                                 onClick={() => setSidebarCollapsed(false)}
-                                className="text-gpt-text-secondary hover:bg-gpt-hover flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg"
+                                className="text-gpt-text-secondary hover:bg-gpt-hover hidden h-10 w-10 cursor-pointer items-center justify-center rounded-lg md:flex"
                                 aria-label="Open sidebar"
                             >
                                 <svg
