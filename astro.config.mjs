@@ -6,6 +6,9 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node'; // Change this import
+
+const isDev = process.env.NODE_ENV === 'development';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,7 +16,9 @@ export default defineConfig({
     integrations: [react()],
     site: 'https://www.leeweisberger.com',
 
-    adapter: cloudflare(),
+    adapter: isDev 
+    ? node({ mode: 'standalone' })
+    : cloudflare(),
     // https://github.com/withastro/astro/issues/12824
     vite: {
         plugins: [tailwindcss()],
