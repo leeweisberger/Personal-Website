@@ -1,23 +1,24 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* ChatGPT-style theme colors */
+/* ChatGPT-style light theme colors */
 @theme {
-    --color-gpt-main: #212121;
-    --color-gpt-sidebar: #171717;
-    --color-gpt-input: #2f2f2f;
-    --color-gpt-hover: #2f2f2f;
-    --color-gpt-border: #424242;
+    --color-gpt-main: #ffffff;
+    --color-gpt-sidebar: #f9f9f9;
+    --color-gpt-input: #ffffff;
+    --color-gpt-hover: #ececec;
+    --color-gpt-border: #e5e5e5;
     --color-gpt-green: #10a37f;
     --color-gpt-green-hover: #1a7f64;
-    --color-gpt-text: #ececec;
-    --color-gpt-text-secondary: #b4b4b4;
+    --color-gpt-text: #0d0d0d;
+    --color-gpt-text-secondary: #6e6e6e;
+    --color-gpt-icon: #0d0d0d;
 }
 
 /* Custom scrollbar styling */
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(86, 88, 105, 0.5) transparent;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -30,13 +31,13 @@
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: rgba(86, 88, 105, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     border: 2px solid transparent;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(86, 88, 105, 0.7);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 /* Smooth animations */
@@ -66,16 +67,16 @@
 
 /* ChatGPT-style prose overrides */
 .prose-gpt {
-    --tw-prose-body: #ececec;
-    --tw-prose-headings: #ececec;
+    --tw-prose-body: #0d0d0d;
+    --tw-prose-headings: #0d0d0d;
     --tw-prose-links: #10a37f;
-    --tw-prose-bold: #ececec;
-    --tw-prose-code: #ececec;
-    --tw-prose-pre-bg: #1e1e1e;
+    --tw-prose-bold: #0d0d0d;
+    --tw-prose-code: #0d0d0d;
+    --tw-prose-pre-bg: #f7f7f8;
 }
 
 .prose-gpt code {
-    background-color: #1e1e1e;
+    background-color: #f7f7f8;
     padding: 0.2em 0.4em;
     border-radius: 4px;
     font-size: 0.9em;
@@ -83,6 +84,7 @@
 
 .prose-gpt pre {
     background-color: #1e1e1e;
+    color: #ffffff;
     border-radius: 8px;
     padding: 1rem;
 }

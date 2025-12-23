@@ -25,7 +25,7 @@ export function LlmResponse(props: Props) {
                         <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gpt-green">
                             <img
                                 src={lee.src}
-                                alt="GPLee"
+                                alt="ChatGPLEE"
                                 className="h-full w-full object-cover"
                             />
                         </div>
@@ -35,7 +35,7 @@ export function LlmResponse(props: Props) {
                 {/* Message content */}
                 <div className="min-w-0 flex-1">
                     <div className="mb-1 text-sm font-semibold text-gpt-text">
-                        {isUser ? 'You' : 'Chat GPLee'}
+                        {isUser ? 'You' : 'ChatGPLEE'}
                     </div>
                     <div className="prose prose-sm prose-gpt max-w-none text-gpt-text">
                         <MemoizedMarkdown id={props.id} content={props.text} />

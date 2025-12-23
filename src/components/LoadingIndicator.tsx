@@ -9,7 +9,7 @@ export function LoadingIndicator() {
                     <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gpt-green">
                         <img
                             src={lee.src}
-                            alt="GPLee is thinking"
+                            alt="ChatGPLEE is thinking"
                             className="h-full w-full object-cover"
                         />
                     </div>
@@ -18,7 +18,7 @@ export function LoadingIndicator() {
                 {/* Typing indicator */}
                 <div className="min-w-0 flex-1">
                     <div className="mb-1 text-sm font-semibold text-gpt-text">
-                        Chat GPLee
+                        ChatGPLEE
                     </div>
                     <div className="flex items-center gap-1">
                         <div className="h-2 w-2 animate-bounce rounded-full bg-gpt-text-secondary [animation-delay:-0.3s]" />
