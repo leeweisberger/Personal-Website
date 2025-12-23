@@ -5,19 +5,15 @@ type Props = {
 const sampleQuestions = [
     {
         title: 'Tell me about yourself',
-        prompt: 'What do you do for work?',
+        prompt: 'What do you currently do for work? What do you do outside of work?',
     },
     {
         title: 'Your background',
-        prompt: 'What is your background and experience?',
+        prompt: 'Tell me about all of your work experiences',
     },
     {
         title: 'Hobbies & interests',
         prompt: 'What do you do for fun?',
-    },
-    {
-        title: 'Career advice',
-        prompt: 'What advice would you give to someone starting in tech?',
     },
 ];
 
@@ -25,7 +21,7 @@ export function EmptyState({ onSampleQuestion }: Props) {
     return (
         <div className="flex h-full flex-col items-center justify-center px-4 py-16">
             {/* Main heading - ChatGPT style */}
-            <h1 className="mb-8 text-center text-3xl font-medium text-gpt-text">
+            <h1 className="text-gpt-text mb-8 text-center text-3xl font-medium">
                 What would you like to know?
             </h1>
 
@@ -35,7 +31,7 @@ export function EmptyState({ onSampleQuestion }: Props) {
                     <button
                         key={item.title}
                         onClick={() => onSampleQuestion(item.prompt)}
-                        className="rounded-full border border-gpt-border bg-gpt-main px-4 py-2 text-sm text-gpt-text transition-colors hover:bg-gpt-hover"
+                        className="border-gpt-border bg-gpt-main text-gpt-text hover:bg-gpt-hover cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors"
                     >
                         {item.title}
                     </button>

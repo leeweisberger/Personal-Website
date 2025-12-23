@@ -34,7 +34,7 @@ export function LlmChat() {
     }
 
     return (
-        <div className="flex h-full w-full bg-gpt-main">
+        <div className="bg-gpt-main flex h-full w-full">
             {/* Sidebar */}
             <Sidebar
                 onNewChat={handleNewChat}
@@ -45,12 +45,12 @@ export function LlmChat() {
             {/* Main content area */}
             <div className="flex flex-1 flex-col">
                 {/* Header */}
-                <header className="flex h-14 items-center justify-between border-b border-gpt-border px-4">
+                <header className="border-gpt-border flex h-14 items-center justify-between border-b px-4">
                     <div className="flex items-center gap-2">
                         {sidebarCollapsed && (
                             <button
                                 onClick={() => setSidebarCollapsed(false)}
-                                className="flex h-10 w-10 items-center justify-center rounded-lg text-gpt-text-secondary hover:bg-gpt-hover"
+                                className="text-gpt-text-secondary hover:bg-gpt-hover flex h-10 w-10 items-center justify-center rounded-lg"
                                 aria-label="Open sidebar"
                             >
                                 <svg
@@ -72,19 +72,8 @@ export function LlmChat() {
                                 </svg>
                             </button>
                         )}
-                        <h1 className="flex items-center gap-1 text-lg font-semibold text-gpt-text">
-                            ChatGPLEE
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                className="text-gpt-text-secondary"
-                            >
-                                <path d="M6 9l6 6 6-6" />
-                            </svg>
+                        <h1 className="text-gpt-text flex items-center gap-1 text-lg font-semibold">
+                            ChatGPLee
                         </h1>
                     </div>
                 </header>
@@ -113,7 +102,7 @@ export function LlmChat() {
                 </div>
 
                 {/* Input area - fixed at bottom */}
-                <div className="pb-4 pt-2">
+                <div className="pt-2 pb-4">
                     <div className="mx-auto max-w-3xl px-4">
                         <ChatInput
                             value={input}
@@ -121,8 +110,8 @@ export function LlmChat() {
                             onSubmit={() => submitQuestion()}
                             disabled={isLoading}
                         />
-                        <p className="mt-2 text-center text-xs text-gpt-text-secondary">
-                            ChatGPLEE can make mistakes. Consider checking
+                        <p className="text-gpt-text-secondary mt-2 text-center text-xs">
+                            ChatGPLee can make mistakes. Consider checking
                             important info.
                         </p>
                     </div>

@@ -7,7 +7,7 @@ type Props = {
 export function Sidebar({ onNewChat, isCollapsed, onToggleCollapse }: Props) {
     return (
         <div
-            className={`flex h-full flex-col bg-gpt-sidebar transition-all duration-300 ${
+            className={`bg-gpt-sidebar flex h-full flex-col transition-all duration-300 ${
                 isCollapsed ? 'w-0 overflow-hidden' : 'w-64'
             }`}
         >
@@ -15,7 +15,7 @@ export function Sidebar({ onNewChat, isCollapsed, onToggleCollapse }: Props) {
             <div className="flex h-14 items-center justify-between px-3">
                 <button
                     onClick={onToggleCollapse}
-                    className="flex h-10 w-10 items-center justify-center rounded-lg text-gpt-text-secondary hover:bg-gpt-hover"
+                    className="text-gpt-text-secondary hover:bg-gpt-hover flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg"
                     aria-label="Toggle sidebar"
                 >
                     <svg
@@ -34,7 +34,7 @@ export function Sidebar({ onNewChat, isCollapsed, onToggleCollapse }: Props) {
                 {/* New chat button */}
                 <button
                     onClick={onNewChat}
-                    className="flex h-10 w-10 items-center justify-center rounded-lg text-gpt-text-secondary hover:bg-gpt-hover"
+                    className="text-gpt-text-secondary hover:bg-gpt-hover flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg"
                     aria-label="New chat"
                 >
                     <svg
@@ -55,7 +55,7 @@ export function Sidebar({ onNewChat, isCollapsed, onToggleCollapse }: Props) {
             <div className="flex-1 px-2">
                 <button
                     onClick={onNewChat}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gpt-text hover:bg-gpt-hover"
+                    className="text-gpt-text hover:bg-gpt-hover flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm"
                 >
                     <svg
                         width="18"
