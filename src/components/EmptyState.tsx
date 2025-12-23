@@ -3,30 +3,41 @@ type Props = {
 };
 
 const sampleQuestions = [
-    'What do you do for work?',
-    'What is your background?',
-    'What do you do for fun?',
+    {
+        title: 'Tell me about yourself',
+        prompt: 'What do you currently do for work? What do you do outside of work?',
+    },
+    {
+        title: 'Your background',
+        prompt: 'Tell me about all of your work experiences',
+    },
+    {
+        title: 'Hobbies & interests',
+        prompt: 'What do you do for fun?',
+    },
+    {
+        title: 'Tell me a joke',
+        prompt: 'Come up with a punny "Lee" joke. It should involve the name Lee using an adverb like "quick-Lee" or "intelligent-Lee" in the punchline.',
+    },
 ];
 
 export function EmptyState({ onSampleQuestion }: Props) {
     return (
-        <div className="flex flex-col items-center justify-center space-y-6 p-8 text-center">
-            <div className="space-y-2">
-                <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-                    Welcome! 👋
-                </h2>
-            </div>
+        <div className="flex h-full flex-col items-center justify-center px-4 py-16">
+            {/* Main heading - ChatGPT style */}
+            <h1 className="text-gpt-text mb-8 text-center text-3xl font-medium">
+                What would you like to know?
+            </h1>
 
-            <div className="grid w-full gap-3 sm:grid-cols-2">
-                {sampleQuestions.map((question) => (
+            {/* Sample prompts as small pills */}
+            <div className="flex flex-wrap justify-center gap-2">
+                {sampleQuestions.map((item) => (
                     <button
-                        key={question}
-                        onClick={() => onSampleQuestion(question)}
-                        className="group rounded-lg border border-gray-200 bg-white p-4 text-left text-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
+                        key={item.title}
+                        onClick={() => onSampleQuestion(item.prompt)}
+                        className="border-gpt-border bg-gpt-main text-gpt-text hover:bg-gpt-hover cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors"
                     >
-                        <span className="text-gray-700 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-blue-400">
-                            {question}
-                        </span>
+                        {item.title}
                     </button>
                 ))}
             </div>
