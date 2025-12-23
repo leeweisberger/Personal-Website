@@ -193,8 +193,7 @@ export function LlmChat() {
                             disabled={isLoading}
                         />
                         <p className="text-gpt-text-secondary mt-2 text-center text-xs">
-                            ChatGPLee can make mistakes. Consider checking
-                            important info.
+                            ChatGPLee can make mistakes. Just like real Lee.
                         </p>
                     </div>
                 </div>
