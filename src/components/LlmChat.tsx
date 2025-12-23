@@ -1,6 +1,5 @@
-import { LlmInput } from './LlmInput';
+import { ChatInput } from './ChatInput';
 import { useEffect, useRef } from 'react';
-import { LlmButton } from './LlmButton';
 import { LlmResponse } from './LlmResponse';
 import { EmptyState } from './EmptyState';
 import { LoadingIndicator } from './LoadingIndicator';
@@ -28,45 +27,42 @@ export function LlmChat() {
     }
 
     return (
-        <div className="flex h-full w-full flex-col">
-            {/* Messages container - takes up available space */}
-            <div className="flex flex-1 flex-col gap-3 overflow-auto p-4">
-                {messages.length === 0 ? (
-                    <EmptyState onSampleQuestion={submitQuestion} />
-                ) : (
-                    <>
-                        {messages.map((message) => (
-                            <LlmResponse
-                                key={message.id}
-                                id={message.id}
-                                role={message.role}
-                                text={message.content}
-                                time={message.createdAt ?? new Date()}
-                            />
-                        ))}
-                        {isLoading && <LoadingIndicator />}
-                        <div ref={messagesEndRef} />
-                    </>
-                )}
+        <div className="flex h-full w-full flex-col bg-gpt-main">
+            {/* Messages container - scrollable area */}
+            <div className="flex-1 overflow-auto">
+                <div className="mx-auto max-w-3xl px-4">
+                    {messages.length === 0 ? (
+                        <EmptyState onSampleQuestion={submitQuestion} />
+                    ) : (
+                        <div className="py-4">
+                            {messages.map((message) => (
+                                <LlmResponse
+                                    key={message.id}
+                                    id={message.id}
+                                    role={message.role}
+                                    text={message.content}
+                                    time={message.createdAt ?? new Date()}
+                                />
+                            ))}
+                            {isLoading && <LoadingIndicator />}
+                            <div ref={messagesEndRef} />
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* Input area - pinned to bottom */}
-            <div className="border-t border-gray-200 bg-gradient-to-b from-transparent to-gray-50/50 p-4 backdrop-blur-sm dark:border-gray-700 dark:to-gray-800/50">
-                <div className="flex flex-col gap-3">
-                    <LlmInput
+            {/* Input area - fixed at bottom, ChatGPT style */}
+            <div className="border-t border-gpt-border bg-gpt-main pb-4 pt-2">
+                <div className="mx-auto max-w-3xl px-4">
+                    <ChatInput
                         value={input}
                         onChange={setInput}
                         onSubmit={() => submitQuestion()}
                         disabled={isLoading}
                     />
-                    <LlmButton
-                        onClick={() => {
-                            submitQuestion();
-                        }}
-                        disabled={isLoading || !input.trim()}
-                    >
-                        {isLoading ? 'Thinking...' : 'Send Message'}
-                    </LlmButton>
+                    <p className="mt-2 text-center text-xs text-gpt-text-secondary">
+                        Chat GPLee can make mistakes. Consider checking important info.
+                    </p>
                 </div>
             </div>
         </div>

@@ -1,10 +1,23 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* ChatGPT-style theme colors */
+@theme {
+    --color-gpt-main: #212121;
+    --color-gpt-sidebar: #171717;
+    --color-gpt-input: #2f2f2f;
+    --color-gpt-hover: #2f2f2f;
+    --color-gpt-border: #424242;
+    --color-gpt-green: #10a37f;
+    --color-gpt-green-hover: #1a7f64;
+    --color-gpt-text: #ececec;
+    --color-gpt-text-secondary: #b4b4b4;
+}
+
 /* Custom scrollbar styling */
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+    scrollbar-color: rgba(86, 88, 105, 0.5) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -17,27 +30,13 @@
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5);
+    background-color: rgba(86, 88, 105, 0.5);
     border-radius: 10px;
     border: 2px solid transparent;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(156, 163, 175, 0.7);
-}
-
-@media (prefers-color-scheme: dark) {
-    * {
-        scrollbar-color: rgba(75, 85, 99, 0.5) transparent;
-    }
-
-    *::-webkit-scrollbar-thumb {
-        background-color: rgba(75, 85, 99, 0.5);
-    }
-
-    *::-webkit-scrollbar-thumb:hover {
-        background-color: rgba(75, 85, 99, 0.7);
-    }
+    background-color: rgba(86, 88, 105, 0.7);
 }
 
 /* Smooth animations */
@@ -63,4 +62,36 @@
 
 .animate-in {
     animation: fade-in 0.3s ease-out;
+}
+
+/* ChatGPT-style prose overrides */
+.prose-gpt {
+    --tw-prose-body: #ececec;
+    --tw-prose-headings: #ececec;
+    --tw-prose-links: #10a37f;
+    --tw-prose-bold: #ececec;
+    --tw-prose-code: #ececec;
+    --tw-prose-pre-bg: #1e1e1e;
+}
+
+.prose-gpt code {
+    background-color: #1e1e1e;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.prose-gpt pre {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.prose-gpt a {
+    color: #10a37f;
+    text-decoration: underline;
+}
+
+.prose-gpt a:hover {
+    color: #1a7f64;
 }
