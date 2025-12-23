@@ -10,7 +10,7 @@ export function LlmChat() {
     const { messages, input, setInput, append, isLoading, setMessages } =
         useChat();
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         setInput('');
@@ -31,47 +31,79 @@ export function LlmChat() {
 
     function handleNewChat() {
         setMessages([]);
+        setSidebarOpen(false);
     }
 
     return (
-        <div className="bg-gpt-main flex h-full w-full">
-            {/* Sidebar */}
-            <Sidebar
-                onNewChat={handleNewChat}
-                isCollapsed={sidebarCollapsed}
-                onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-            />
+        <div className="bg-gpt-main relative flex h-full w-full">
+            {/* Mobile overlay backdrop */}
+            {sidebarOpen && (
+                <div
+                    className="fixed inset-0 z-40 bg-black/20 md:hidden"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+
+            {/* Sidebar - hidden on mobile, shown as overlay when open */}
+            <div
+                className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 md:relative md:translate-x-0 ${
+                    sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                }`}
+            >
+                <Sidebar
+                    onNewChat={handleNewChat}
+                    isCollapsed={false}
+                    onToggleCollapse={() => setSidebarOpen(false)}
+                />
+            </div>
 
             {/* Main content area */}
             <div className="flex flex-1 flex-col">
                 {/* Header */}
                 <header className="border-gpt-border flex h-14 items-center justify-between border-b px-4">
-                    <div className="flex items-center gap-2">
-                        {sidebarCollapsed && (
-                            <button
-                                onClick={() => setSidebarCollapsed(false)}
-                                className="text-gpt-text-secondary hover:bg-gpt-hover flex h-10 w-10 items-center justify-center rounded-lg"
-                                aria-label="Open sidebar"
+                    <div className="flex items-center gap-3">
+                        {/* Mobile menu button - always show on mobile */}
+                        <button
+                            onClick={() => setSidebarOpen(true)}
+                            className="text-gpt-text-secondary hover:bg-gpt-hover flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg md:hidden"
+                            aria-label="Open menu"
+                        >
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
                             >
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                >
-                                    <rect
-                                        x="3"
-                                        y="3"
-                                        width="18"
-                                        height="18"
-                                        rx="2"
-                                    />
-                                    <path d="M9 3v18" />
-                                </svg>
-                            </button>
-                        )}
+                                <path d="M6 9h12" />
+                                <path d="M6 15h12" />
+                            </svg>
+                        </button>
+                        {/* Desktop sidebar toggle - only when closed */}
+                        <button
+                            onClick={() => setSidebarOpen(true)}
+                            className="text-gpt-text-secondary hover:bg-gpt-hover hidden h-10 w-10 cursor-pointer items-center justify-center rounded-lg md:flex"
+                            aria-label="Open sidebar"
+                        >
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
+                                <rect
+                                    x="3"
+                                    y="3"
+                                    width="18"
+                                    height="18"
+                                    rx="2"
+                                />
+                                <path d="M9 3v18" />
+                            </svg>
+                        </button>
                         <h1 className="text-gpt-text flex items-center gap-1 text-lg font-semibold">
                             ChatGPLee
                         </h1>
@@ -111,8 +143,7 @@ export function LlmChat() {
                             disabled={isLoading}
                         />
                         <p className="text-gpt-text-secondary mt-2 text-center text-xs">
-                            ChatGPLee can make mistakes. Consider checking
-                            important info.
+                            ChatGPLee can make mistakes. Just like real Lee.
                         </p>
                     </div>
                 </div>

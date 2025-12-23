@@ -15,6 +15,10 @@ const sampleQuestions = [
         title: 'Hobbies & interests',
         prompt: 'What do you do for fun?',
     },
+    {
+        title: 'Tell me a joke',
+        prompt: 'Come up with a punny "Lee" joke. It should involve the name Lee using an adverb like "quick-Lee" or "intelligent-Lee" in the punchline.',
+    },
 ];
 
 export function EmptyState({ onSampleQuestion }: Props) {
