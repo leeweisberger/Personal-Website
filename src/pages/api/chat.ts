@@ -54,7 +54,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     );
 
     const result = streamText({
-        model: groq('meta-llama/llama-4-maverick-17b-128e-instruct'),
+        model: groq('openai/gpt-oss-120b'),
         messages,
         system: systemPrompt,
     });
